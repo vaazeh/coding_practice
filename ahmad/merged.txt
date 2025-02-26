@@ -1,0 +1,4 @@
+1234567890
+0987654321
+file1.txt
+python file_merger.py --append file1.txt file2.txt merged.txt
