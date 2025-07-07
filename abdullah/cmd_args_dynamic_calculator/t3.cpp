@@ -2,7 +2,7 @@
 #include <string>
 using namespace std;
 
-// Define enum
+
 enum Operator {
     Add,
     Sub,
@@ -11,7 +11,6 @@ enum Operator {
     Invalid
 };
 
-// Function to map char to enum
 Operator getOperator(char op) {
     if (op == '+') return Add;
     if (op == '-') return Sub;
@@ -20,7 +19,7 @@ Operator getOperator(char op) {
     return Invalid;
 }
 
-// Perform operation
+
 void calculate(int left, int right, Operator op) {
     switch(op) {
         case Add:
@@ -58,20 +57,20 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // If operator not found
+    
     if (i == input.length()) return 1;
 
-    // Split input
+    
     string left_str = input.substr(0, i);
     string right_str = input.substr(i + 1);
 
     int left = stoi(left_str);
     int right = stoi(right_str);
 
-    // Map char to enum
+    
     Operator op = getOperator(op_char);
 
-    // Calculate
+    
     calculate(left, right, op);
 
     return 0;
