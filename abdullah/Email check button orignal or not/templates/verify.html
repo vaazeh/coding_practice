@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Verify OTP</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    .box { max-width: 420px; margin: auto; padding: 24px; border: 1px solid #ddd; border-radius: 10px; }
+    input { width:100%; padding:10px; border:1px solid #ccc; border-radius:6px; }
+    .msg { margin: 10px 0; padding: 10px; border-radius: 6px; }
+    .msg.error { background:#ffe9e9; color:#a40000; }
+    .msg.success { background:#e9ffef; color:#006b2e; }
+    a, button { display:inline-block; margin-top:12px; }
+    .hint { color:#555; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Enter OTP</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="msg {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <p class="hint">We sent a 6-digit code to <strong>{{ email }}</strong>. It will expire in 10 minutes.</p>
+
+    <form method="POST">
+      <input type="text" name="otp" placeholder="Enter 6-digit code" required />
+      <button type="submit">Verify</button>
+    </form>
+
+    <p class="hint">
+      Didn't get the code? <a href="{{ url_for('resend') }}">Resend OTP</a>
+    </p>
+  </div>
+</body>
+</html>
