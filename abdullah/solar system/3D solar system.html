@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Solar System</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script>
+        // Scene, Camera, Renderer
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Camera position
+        camera.position.set(0, 50, 150);
+
+        // OrbitControls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableZoom = true;
+        controls.enablePan = true;
+
+        // Sun
+        const sunGeometry = new THREE.SphereGeometry(6, 32, 32);
+        const sunMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+        const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+        scene.add(sun);
+
+        // Sunlight
+        const sunlight = new THREE.PointLight(0xffffff, 2, 600);
+        sunlight.position.set(0, 0, 0);
+        scene.add(sunlight);
+
+        // Planet Data (relative size, distance from Sun, orbital speed)
+        const planets = [
+            { name: "Mercury", size: 1.38, distance: 10, color: 0xb87333, speed: 0.0047, orbitRadius: 10 },
+            { name: "Venus", size: 1.95, distance: 15, color: 0xe5d7a6, speed: 0.0035, orbitRadius: 15 },
+            { name: "Earth", size: 1.95, distance: 20, color: 0x00ff00, speed: 0.0029, orbitRadius: 20 },
+            { name: "Mars", size: 1.53, distance: 25, color: 0xff4500, speed: 0.0024, orbitRadius: 25 },
+            { name: "Jupiter", size: 9.2, distance: 35, color: 0xd2b48c, speed: 0.0013, orbitRadius: 35 },
+            { name: "Saturn", size: 9.45, distance: 45, color: 0xf4a460, speed: 0.0009, orbitRadius: 45 },
+            { name: "Uranus", size: 5.0, distance: 55, color: 0x87cefa, speed: 0.0007, orbitRadius: 55 },
+            { name: "Neptune", size: 4.88, distance: 65, color: 0x4682b4, speed: 0.0006, orbitRadius: 65 }
+        ];
+
+        // Create Planets
+        const planetMeshes = [];
+        planets.forEach(planet => {
+            const geometry = new THREE.SphereGeometry(planet.size, 32, 32);
+            const material = new THREE.MeshLambertMaterial({ color: planet.color });
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(planet.distance, 0, 0);
+            scene.add(mesh);
+            planetMeshes.push({ mesh, planet, angle: 0 });
+        });
+
+        // Animation
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Time variable to simulate orbit speed over time
+            const deltaTime = Date.now() * 0.0001;
+
+            // Update each planet's orbit
+            planetMeshes.forEach(({ mesh, planet }, index) => {
+                const angle = deltaTime * planet.speed * 3000;  // Multiplied to exaggerate the speed for better visibility
+                mesh.position.x = Math.cos(angle) * planet.orbitRadius;
+                mesh.position.z = Math.sin(angle) * planet.orbitRadius;
+            });
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Click Event
+        window.addEventListener('click', function(event) {
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2();
+
+            // Convert mouse click position to normalized device coordinates (-1 to +1)
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+
+            const intersects = raycaster.intersectObjects(scene.children);
+            if (intersects.length > 0) {
+                const clickedObject = intersects[0].object;
+
+                planetMeshes.forEach(({ mesh, planet }) => {
+                    if (clickedObject === mesh) {
+                        alert(`${planet.name}: \nSize: ${planet.size}x Earth\nDistance from Sun: ${planet.distance} AU\nOrbital Speed: ${planet.speed}`);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
