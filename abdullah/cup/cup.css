@@ -9,7 +9,7 @@ body{
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #607d60;
+    background: #4d744d;
 
 }
 .cup main
@@ -21,7 +21,7 @@ body{
     position: relative;
     width: 280px;
     height: 300px;
-    background:linear-gradient(to right,#fafafa,#d9d9d9);
+    background:linear-gradient(to right,#1c0505,#d9d9d9);
     border: 25px ;
     border-bottom-left-radius: 45%;
     border-bottom-right-radius: 45%;
@@ -48,7 +48,7 @@ body{
  border-radius: 50%;
  box-sizing: border-box;
  overflow: hidden;
- background:linear-gradient(to left,#fafafa,#d9d9d9);
+ background:linear-gradient(to left,#fafafa,#e0d9d9);
 }
 .tea{
     position: absolute;
@@ -67,7 +67,7 @@ right: -70px;
 top: 60px;
 width: 160px;
 height: 190px;
-border: 25px solid #f6f4f4b9;
+border: 25px solid #d9d9d9;
 border-left: 25px solid transparent;
 border-bottom: 25px solid transparent;
 border-radius: 50%;
